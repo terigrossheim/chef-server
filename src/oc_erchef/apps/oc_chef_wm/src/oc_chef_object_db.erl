@@ -76,9 +76,8 @@ delete(DbContext, #chef_data_bag{org_id = OrgId,
     %% Remove data bag from database; no need to remove from Solr, since they're not indexed
     %% anyway (what's there to index, after all?)
     delete_from_db(DbContext, RequestorId, DataBag), % throws on error
-    %% Remove data bag items from Solr now; directly calling chef_index_queue:delete since
-    %% we've just got ids, and not proper data bag item records required for
-    %% delete_from_solr
+    %% Remove data bag items from Solr now; directly calling chef_index:delete since we've
+    %% just got ids, and not proper data bag item records required for delete_from_solr
     bulk_delete_from_solr(data_bag_item, DataBagItemIds, OrgId, DbContext#context.reqid),
     ok;
 delete(DbContext = #context{reqid= ReqId}, Object, RequestorId) ->
@@ -171,8 +170,7 @@ object_rec_to_index_args(ObjectRec, ObjectEjson) ->
     TypeName = chef_object:type_name(ObjectRec),
     {TypeName, Id, DbName, IndexEjson}.
 
-%% @doc Helper function to easily delete an object from Solr, instead
-%% of calling chef_index_queue directly.
+%% @doc Helper function to easily delete an object from Solr
 -spec delete_from_solr(tuple(), binary()) -> ok.
 delete_from_solr(ObjectRec, ReqId) ->
     case chef_object:is_indexed(ObjectRec) of
@@ -186,9 +184,7 @@ delete_from_solr(ObjectRec, ReqId) ->
     end.
 
 %% @doc Given an object type and a list of ids, delete the corresponding search index data
-%% from solr. The delete is achieved by putting a delete message on the indexing queue
-%% (rabbitmq). The delete happens asynchronously (best effort) and this function returns
-%% immediately.
+%% from solr.
 -spec bulk_delete_from_solr(atom(), [binary()], binary(), binary()) -> ok.
 bulk_delete_from_solr(Type, Ids, OrgId, ReqId) ->
     [ chef_index:delete(Type, Id, OrgId, ReqId) || Id <- Ids ],

@@ -111,14 +111,6 @@ make
 #### Running Tests
 
 ##### Running Integration Tests
-The queue monitor integration tests require RabbitMQ + Management plugins.
-
-Start RabbitMQ via:
-`rabbitmq-server`
-
-and enable the management plugin:
-`rabbitmq-plugins enable rabbitmq_management`
-
 
 Run the integration tests with the following:
 

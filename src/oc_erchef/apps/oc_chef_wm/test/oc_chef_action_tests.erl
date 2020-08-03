@@ -367,7 +367,6 @@ end_to_end_test_() ->
                         organization_name = <<"cmwest">>,
                         resource_state=#node_state{node_data = {[{<<"name">>,<<"db">>}]} }},
     ok = application:set_env(oc_chef_wm, actions_fqdn, HostFQDN),
-    ok = application:set_env(oc_chef_wm, rabbitmq_queue_length_monitor_enabled, false),
     {foreach,
      fun() -> oc_chef_wm_test_utils:setup(MockedModules),
               meck:expect(chef_wm_util,object_name, fun(node, req) -> undefined end),
@@ -473,8 +472,8 @@ ping_test_() ->
      fun(_) ->
              meck:unload(chef_wm_rabbitmq_management)
      end,
-     [{"Aliveness returns true causes pong", 
-       fun() -> 
+     [{"Aliveness returns true causes pong",
+       fun() ->
                meck:expect(chef_wm_rabbitmq_management, check_aliveness,
                            fun(_, "/actions") ->
                                    true
@@ -484,7 +483,7 @@ ping_test_() ->
        end
       },
       {"Not Aliveness causes pang",
-       fun() -> 
+       fun() ->
                meck:expect(chef_wm_rabbitmq_management, check_aliveness,
                            fun(_, "/actions") ->
                                    false

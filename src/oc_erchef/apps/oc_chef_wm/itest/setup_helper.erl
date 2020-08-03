@@ -140,8 +140,6 @@ needed_apps() ->
      folsom,
      chef_objects,
      rabbit_common,
-     amqp_client,
-     gen_bunny,
      compiler,
      syntax_tools,
      goldrush,
