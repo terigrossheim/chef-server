@@ -180,8 +180,7 @@ auth(RequestId, Req0, #context{reqid = ReqId} = Context, Credential, XAmzDate, S
         Path = wrq:path(Req0),
 
         % CODE REVIEW: used in both verification types
-        Config0 = mini_s3:new(AccessKey, SecretKey, Host),
-Config = Config0#aws_config{s3_bucket_after_host=true, s3_bucket_access_method=path},
+        Config = mini_s3:new(AccessKey, SecretKey, Host, path),
 
         % CODE REVIEW: AltSignedHeaders used in both verification types
 
