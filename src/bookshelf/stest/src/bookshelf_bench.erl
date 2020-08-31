@@ -96,7 +96,7 @@ init([]) ->
 
     io:format("S3_HOST: ~p~n", [S3Host]),
 
-    S3Config = mini_s3:new(S3AccessKeyId, S3SecretAccessKey, S3Host, vhost),
+    S3Config = mini_s3:new(S3AccessKeyId, S3SecretAccessKey, S3Host, path),
 
     %% todo:
     %% this is ugly here, but we need to get ibrowse started

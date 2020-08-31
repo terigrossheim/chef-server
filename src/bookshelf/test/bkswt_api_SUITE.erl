@@ -192,7 +192,7 @@ init_per_testcase(upgrade_from_v0, Config) ->
     S3State = mini_s3:new(AccessKeyID, SecretAccessKey,
                           lists:flatten(io_lib:format("http://127.0.0.1:~p",
                                                       [Port])),
-                          vhost),
+                          path),
     [{s3_conf, S3State}, {disk_store, DiskStore}, {apps, lists:reverse(Apps)} | Config];
 init_per_testcase(Casename, Config0) ->
     load_default_config(),
@@ -225,7 +225,7 @@ init_per_testcase(Casename, Config0) ->
     SecretAccessKey = ?secretaccesskey,
     S3State = mini_s3:new(AccessKeyID, SecretAccessKey,
                           lists:flatten(io_lib:format("http://~s:~p", [Ip, Port])),
-                          vhost),
+                          path),
     [{s3_conf, S3State}, {apps, lists:reverse(Apps)} | Config0].
 
 end_per_testcase(_TestCase, Config) ->
@@ -555,7 +555,7 @@ sec_fail(doc) ->
 sec_fail(suite) ->
     [];
 sec_fail(Config) when is_list(Config) ->
-    BogusS3Conf = mini_s3:new(<<"nopenope">>, <<"evenmorenope">>, "http://127.0.0.1:4321", vhost, []),
+    BogusS3Conf = mini_s3:new(<<"nopenope">>, <<"evenmorenope">>, "http://127.0.0.1:4321", path, []),
     Bucket = "thisshouldfail",
     ?assertError({aws_error, {http_error, 403, _, _}},
                  mini_s3:create_bucket(Bucket, public_read_write, none, BogusS3Conf)),
