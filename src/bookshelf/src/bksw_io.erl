@@ -233,12 +233,12 @@ write(#entryref{fd=Fd, ctx=Ctx,
 
 -spec finish_write(#entryref{}) -> {ok, binary()} | {error, file:posix() | badarg}.
 finish_write(#entryref{fd=Fd, path=Path, bucket=Bucket, entry=Entry, ctx=Ctx}) ->
+    Digest = erlang:md5_final(Ctx),
+    %% Seek to metadata section of file
+    {ok, ?MAGIC_NUMBER_SIZE_BYTES} = file:position(Fd, {bof, ?MAGIC_NUMBER_SIZE_BYTES}),
+    file:write(Fd, Digest),
     case file:sync(Fd) of
         ok ->
-            Digest = erlang:md5_final(Ctx),
-            %% Seek to metadata section of file
-            {ok, ?MAGIC_NUMBER_SIZE_BYTES} = file:position(Fd, {bof, ?MAGIC_NUMBER_SIZE_BYTES}),
-            file:write(Fd, Digest),
             file:close(Fd),
             FinalPath = bksw_io_names:entry_path(Bucket, Entry),
             case filelib:ensure_dir(FinalPath) of
