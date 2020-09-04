@@ -333,7 +333,8 @@ module Pedant
         # NOTE(ssd) 2020-06-15: Chef::ServerAPI always sets the Host
         # header to HOSTNAME:PORT. We do the same here to avoid v4
         # signing issues.
-        response = http.get(uri.request_uri, {"Host" => "#{uri.hostname}:#{uri.port}"})
+        #response = http.get(uri.request_uri, {"Host" => "#{uri.hostname}:#{uri.port}"})
+        response = Pedant::Utility.get_host_port http, uri
 
         begin
           response.code.should eq expected_reponse_code.to_s

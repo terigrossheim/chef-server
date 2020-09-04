@@ -220,7 +220,8 @@ describe "Cookbook Artifacts API endpoint", :cookbook_artifacts, :cookbook_artif
           # Chef::ServerAPI always sets the Host
           # header to HOSTNAME:PORT. We do the same here to avoid sigv4
           # signing issues.
-          response = http.get(uri.request_uri, {"Host" => "#{uri.hostname}:#{uri.port}"})
+          #response = http.get(uri.request_uri, {"Host" => "#{uri.hostname}:#{uri.port}"})
+          response = Pedant::Utility.get_host_port http, uri
           response.body.should == recipe_content
         end
 
