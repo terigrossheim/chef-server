@@ -17,8 +17,8 @@ require_relative './preflight_checks.rb'
 
 class SolrPreflightValidator < PreflightValidator
   # The cs_*attr variables hold the user-defined configuration
-  attr_reader :cs_solr_attr, :cs_erchef_attr,
-              :cs_elasticsearch_attr, :cs_rabbitmq_attr,
+  attr_reader :cs_solr_attr, :cs_erchef_attr, :cs_rabbitmq_attr
+              :cs_elasticsearch_attr
               :cs_opscode_expander_attr
 
   # The node_*attr variables hold the default configuration
